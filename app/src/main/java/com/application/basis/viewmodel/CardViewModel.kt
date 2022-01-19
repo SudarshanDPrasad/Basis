@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 @HiltViewModel
-class CardViewModel @Inject constructor(val cardRepo: CardRepo) : ViewModel() {
+open class CardViewModel @Inject constructor(val cardRepo: CardRepo) : ViewModel() {
 
      fun getData(): LiveData<Resource<ResponseModel>> {
         return liveData(Dispatchers.IO) {

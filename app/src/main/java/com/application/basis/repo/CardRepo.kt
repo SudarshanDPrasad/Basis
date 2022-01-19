@@ -8,7 +8,7 @@ import com.application.sunstonekotlinassignment.data.ResponseHandler
 import dagger.Module
 import javax.inject.Inject
 
-class CardRepo @Inject constructor() {
+open class CardRepo @Inject constructor() {
 
     var responseHandler = ResponseHandler()
 
