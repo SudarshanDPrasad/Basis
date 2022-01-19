@@ -1,19 +1,21 @@
 package com.application.basis
 
+import androidx.lifecycle.LiveData
 import com.application.basis.api.ApiClient
 import com.application.basis.local.data.ResponseModel
 import com.application.basis.repo.CardRepo
-import com.application.basis.viewmodel.CardViewModel
+import com.application.basis.ui.viewmodel.CardViewModel
 import com.application.sunstonekotlinassignment.data.Resource
 import com.application.sunstonekotlinassignment.data.ResponseHandler
 import com.application.sunstonekotlinassignment.data.Status
+import io.reactivex.rxjava3.core.Single
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.notification.Failure
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
@@ -35,8 +37,9 @@ class ApiTest {
     @Mock
     lateinit var responseModel: ResponseModel
 
-    lateinit var success: Resource<ResponseModel>
-    lateinit var failure: Resource<ResponseModel>
+    lateinit var success: LiveData<Resource<ResponseModel>>
+    lateinit var failure: LiveData<Resource<ResponseModel>>
+
 
     @Mock
     lateinit var socketException: SocketException
@@ -54,24 +57,24 @@ class ApiTest {
     @Test
     fun test1(){
         viewModel.getData()
-        assertEquals(success.status, Status.SUCCESS)
+        assertEquals(success, Status.SUCCESS)
     }
 
     @Test
     fun test2(){
         viewModel.getData()
-        assertEquals(failure.status, Status.ERROR)
+        assertEquals(failure, Status.ERROR)
     }
 
 
 
-    suspend fun data(){
-        failure = responseHandler.handleException(socketException)
-        success = responseHandler.handleSuccess(responseModel)
+     fun data(){
+        failure = cardRepo.mutableLiveData
+        success = cardRepo.mutableLiveData
 
-        `when`<String>(apiClient.getResponse()).thenReturn(responseModel.toString())
+        `when`<Single<String>>(apiClient.getResponse()).thenReturn(Single.just(responseModel.toString()))
 
-        `when`<Resource<ResponseModel>>(cardRepo.getData()).thenReturn(failure)
-        `when`<Resource<ResponseModel>>(cardRepo.getData()).thenReturn(success)
+        `when`<LiveData<Resource<ResponseModel>>>(cardRepo.mutableLiveData).thenReturn(failure)
+        `when`<LiveData<Resource<ResponseModel>>>(cardRepo.mutableLiveData).thenReturn(success)
     }
 }
