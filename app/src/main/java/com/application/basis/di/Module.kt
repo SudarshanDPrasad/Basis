@@ -13,7 +13,9 @@ import com.google.gson.Gson
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-
+/**
+ * object class to create SingleTon so we can use this were ever we want without creating an object
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object MovieModule {
@@ -21,7 +23,7 @@ object MovieModule {
 
     @Singleton
     @Provides
-     fun ProvidesApi(): Retrofit {
+     fun providesApi(): Retrofit {
 
         return Retrofit.Builder()
             .baseUrl("https://git.io/")

@@ -9,40 +9,44 @@ import com.application.basis.R
 import com.application.basis.databinding.ItemLayoutBinding
 import com.application.basis.local.data.Data
 
-class cardadaptor(
-    val viewPager2: ViewPager2,
+/**
+ * Adapter and Holder Class where we assign the values for the item layout from the model class
+ */
+class CardAdapter(
+    private val viewPager2: ViewPager2,
     val list: ArrayList<Data>,
-) : RecyclerView.Adapter<cardadaptor.cardholder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): cardholder {
+) : RecyclerView.Adapter<CardAdapter.CardHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardHolder {
 
         val itemLayoutBinding: ItemLayoutBinding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.context),
                 R.layout.item_layout, parent, false)
 
-        return cardholder(itemLayoutBinding)
+        return CardHolder(itemLayoutBinding)
     }
 
-    override fun onBindViewHolder(holder: cardholder, position: Int) {
-        val listdata = list[position]
-        holder.setData(listdata)
+    override fun onBindViewHolder(holder: CardHolder, position: Int) {
+        val listData = list[position]
+        holder.setData(listData)
         if (position == list.size - 2) {
             viewPager2.post(run)
         }
     }
 
-    val run = object : Runnable {
-        override fun run() {
-            list.addAll(list)
-            notifyDataSetChanged()
-        }
+    /**
+     * Function for the Restart of the card Holder
+     */
+    private val run = Runnable {
+        list.addAll(list)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    class cardholder(
-        val itemLayoutBinding: ItemLayoutBinding,
+    class CardHolder(
+        private val itemLayoutBinding: ItemLayoutBinding,
     ) : RecyclerView.ViewHolder(itemLayoutBinding.root) {
 
         fun setData(data: Data) {
