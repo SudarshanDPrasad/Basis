@@ -74,7 +74,7 @@ class ApiTest {
 
         `when`<Single<String>>(apiClient.getResponse()).thenReturn(Single.just(responseModel.toString()))
 
-        `when`<LiveData<Resource<ResponseModel>>>(cardRepo.mutableLiveData).thenReturn(failure)
-        `when`<LiveData<Resource<ResponseModel>>>(cardRepo.mutableLiveData).thenReturn(success)
+        `when`<LiveData<Resource<ResponseModel>>>(cardRepo.getDatafromAPI()).thenReturn(failure)
+        `when`<LiveData<Resource<ResponseModel>>>(cardRepo.getDatafromAPI()).thenReturn(success)
     }
 }
